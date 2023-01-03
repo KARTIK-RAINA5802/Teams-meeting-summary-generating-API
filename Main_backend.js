@@ -7,12 +7,13 @@ const port = 3000;
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
     if (req.url == '/') {
-        res.end('this is the main page')
-    } else if (req.url == '/contact') {
         fs.readFile(`${__dirname}/summary.json`, 'utf-8', (err, data) => {
             console.log(data)
             res.end(data)
         })
+    } else if (req.url == '/contact') {
+
+        res.end('this is the contact page')
     } else {
         res.end('this is error page')
     }
