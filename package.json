@@ -1,5 +1,22 @@
 {
+  "name": "deep-blue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mihir6365/Teams-meeting-summary-generating-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mihir6365/Teams-meeting-summary-generating-API/issues"
+  },
+  "homepage": "https://github.com/Mihir6365/Teams-meeting-summary-generating-API#readme",
   "dependencies": {
-    "nodemon": "^2.0.20"
+    "express": "^4.18.2"
   }
 }
