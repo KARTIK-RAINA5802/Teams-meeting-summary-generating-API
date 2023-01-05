@@ -1,12 +1,16 @@
-const fs = require('fs');
-const http = require('http');
-const express = require('express')
+import express from 'express';
+import fun from './test.js';
 const app = express()
 
+var objdata = await fun();
+// const data = async () => {
+//     var x = await fun()
+//     objdata = x;
+// }
 
 
-var data = fs.readFileSync(`${__dirname}/summary.json`)
-var objdata = JSON.parse(data);
+// const objdata = { "name": "abc" }
+// var objdata = JSON.parse(data);
 app.get('/', (req, res) => {
     res.send(objdata)
 })
