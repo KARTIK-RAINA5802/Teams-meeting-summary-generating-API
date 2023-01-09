@@ -1,20 +1,24 @@
 import express from 'express';
-import fun from './test.js';
+// import fun from './test.js';
 const app = express()
 
-var objdata = await fun();
+// var objdata = await fun();
 // const data = async () => {
 //     var x = await fun()
 //     objdata = x;
 // }
 
-
 // const objdata = { "name": "abc" }
 // var objdata = JSON.parse(data);
 app.get('/', (req, res) => {
-    res.send(objdata)
+    res.send('Hello world')
 })
-app.get('/appdata', (req, res) => {
+app.get('/summmarize', (req, res) => {
+
+    res.send({ "version": "1.0.0", "Name": "Teams meeting summarizer" })
+})
+app.get('/post', (req, res) => {
+    req.body
     res.send({ "version": "1.0.0", "Name": "Teams meeting summarizer" })
 })
 
