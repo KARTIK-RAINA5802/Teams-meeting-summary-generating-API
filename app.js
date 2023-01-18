@@ -28,10 +28,6 @@ app.post('/profile', async (req, res) => {
             if (err) throw err;
             return res.json(result)
         });
-
-
-
-
 });
 
 app.listen(process.env.PORT || 3000, () => { console.log("running...") })
