@@ -1,22 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import { MongoClient } from 'mongodb';
-// import fun from './test.js';
 const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const client = new MongoClient(process.env.uri);
-
-// var objdata = await fun();
-// const data = async () => {
-//     var x = await fun()
-//     objdata = x;
-// }
-
-// const objdata = { "name": "abc" }
-// var objdata = JSON.parse(data);
-
-//aaaa
 
 app.get('/', (req, res) => {
     res.send('Hello world')
@@ -30,14 +18,20 @@ app.post('/addprofile', async (req, res) => {
     return res.json({ status: true })
 });
 
-app.get('/getprofile', async (req, res) => {
+app.post('/profile', async (req, res) => {
+
+    var query = { _id: req.body.id };
+
     client.db("Teams_summarizer")
         .collection("User_profiles")
-        .find({}, function (err, result) {
-            if (err)
-                throw err;
+        .find(query).toArray(function (err, result) {
+            if (err) throw err;
             return res.json(result)
         });
+
+
+
+
 });
 
 app.listen(process.env.PORT || 3000, () => { console.log("running...") })
