@@ -33,7 +33,7 @@ app.post('/addprofile', async (req, res) => {
 app.get('/getprofile', async (req, res) => {
     client.db("Teams_summarizer")
         .collection("User_profiles")
-        .findOne({}, function (err, result) {
+        .find({}, function (err, result) {
             if (err)
                 throw err;
             return res.json(result)
