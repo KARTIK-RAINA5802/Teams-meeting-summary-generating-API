@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Mihir6365/Teams-meeting-summary-generating-API#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongodb": "^4.13.0"
   }
 }

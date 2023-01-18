@@ -1,6 +1,11 @@
+import 'dotenv/config';
 import express from 'express';
+import { MongoClient } from 'mongodb';
 // import fun from './test.js';
 const app = express()
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const client = new MongoClient(process.env.uri);
 
 // var objdata = await fun();
 // const data = async () => {
@@ -10,16 +15,19 @@ const app = express()
 
 // const objdata = { "name": "abc" }
 // var objdata = JSON.parse(data);
+
+
 app.get('/', (req, res) => {
     res.send('Hello world')
 })
-app.get('/summmarize', (req, res) => {
 
-    res.send({ "version": "1.0.0", "Name": "Teams meeting summarizer" })
-})
-app.get('/post', (req, res) => {
-    req.body
-    res.send({ "version": "1.0.0", "Name": "Teams meeting summarizer" })
-})
+app.post('/addprofile', async (req, res) => {
+    let user = req.body;
+    await client.db("Teams_summarizer")
+        .collection("User_profiles")
+        .insertOne(user)
+    return res.json({ status: true })
+});
+
 
 app.listen(process.env.PORT || 3000, () => { console.log("running...") })
