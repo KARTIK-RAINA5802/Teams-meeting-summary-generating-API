@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
     res.send('Hello world')
 })
 
-app.post('/addprofile', async (req, res) => {
+app.post('/signup', async (req, res) => {
     let user = req.body;
     await client.db("Teams_summarizer")
         .collection("User_profiles")
@@ -17,16 +17,23 @@ app.post('/addprofile', async (req, res) => {
     return res.json({ status: true })
 });
 
-app.post('/profile', async (req, res) => {
-
-    var query = { _id: ObjectId(req.body.id) };
-
+app.post('/login', async (req, res) => {
+    let user = req.body;
     client.db("Teams_summarizer")
         .collection("User_profiles")
-        .find(query).toArray(function (err, result) {
-            if (err) throw err;
+        .findOne({ email: user.email, password: user.password }, function (err, result) {
+            if (err) return { status: false };
             return res.json(result)
         });
 });
 
+app.post('/profile', async (req, res) => {
+    var query = { _id: ObjectId(req.body.id) };
+    client.db("Teams_summarizer")
+        .collection("User_profiles")
+        .find(query).toArray(function (err, result) {
+            if (err) return { status: false };
+            return res.json(result)
+        });
+});
 app.listen(process.env.PORT || 3000, () => { console.log("running...") })
