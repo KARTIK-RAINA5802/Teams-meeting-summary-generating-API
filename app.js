@@ -30,5 +30,14 @@ app.post('/addprofile', async (req, res) => {
     return res.json({ status: true })
 });
 
+app.get('/getprofile', async (req, res) => {
+    client.db("Teams_summarizer")
+        .collection("User_profiles")
+        .findOne({}, function (err, result) {
+            if (err)
+                throw err;
+            return res.json(result)
+        });
+});
 
 app.listen(process.env.PORT || 3000, () => { console.log("running...") })
