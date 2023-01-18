@@ -20,7 +20,7 @@ app.post('/addprofile', async (req, res) => {
 
 app.post('/profile', async (req, res) => {
 
-    var query = { _id: req.body.id };
+    var query = { _id: ObjectId(req.body.id) };
 
     client.db("Teams_summarizer")
         .collection("User_profiles")
