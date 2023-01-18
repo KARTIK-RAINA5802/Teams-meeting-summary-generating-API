@@ -23,7 +23,7 @@ app.post('/login', async (req, res) => {
         .collection("User_profiles")
         .findOne({ email: user.email, password: user.password }, function (err, result) {
             if (err) return { status: false };
-            return res.json(result)
+            return res.json({ status: true, result: result })
         });
 });
 
