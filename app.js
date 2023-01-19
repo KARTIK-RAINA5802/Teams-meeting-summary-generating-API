@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.post('/signup', async (req, res) => {
     let user = req.body;
 
-    collection.find({ email: req.body.email }, { $exists: true }).toArray(function (err, docs) {
+    profile_collection.find({ email: req.body.email }, { $exists: true }).toArray(function (err, docs) {
         if (docs.length > 0) {
             return res.json({ result: "email_exists" })
         }
