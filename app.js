@@ -44,8 +44,8 @@ app.post('/login', async (req, res) => {
 app.post('/profile', async (req, res) => {
     profile_collection
         .findOne({ _id: ObjectId(req.body.id) }, function (err, result) {
-            if (err) return { status: false };
-            return res.json({ status: true, result: result })
+            if (err) return res.json({ result: false });
+            return res.json({ result: result })
         });
 });
 
