@@ -8,7 +8,6 @@ const client = new MongoClient(process.env.uri);
 const profile_collection = client.db("Teams_summarizer")
     .collection("User_profiles");
 
-profile_collection.createIndex({ "email": 1 }, { unique: true })
 ////////////////////////////////////////////////////  ALL PATHS //////////////////////////////////////////////////////////////
 app.get('/', (req, res) => {
     res.send('Hello world')
@@ -17,9 +16,16 @@ app.get('/', (req, res) => {
 app.post('/signup', async (req, res) => {
     let user = req.body;
 
-    await profile_collection
-        .insertOne(user)
-    return res.json({ status: true })
+    collection.find({ email: req.body.email }, { $exists: true }).toArray(function (err, docs) {
+        if (docs.length > 0) {
+            return res.json({ result: "email_exists" })
+        }
+        else {
+            profile_collection
+                .insertOne(user)
+            return res.json({ result: true })
+        }
+    });
 });
 
 app.post('/login', async (req, res) => {
