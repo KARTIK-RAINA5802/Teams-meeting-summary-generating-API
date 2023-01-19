@@ -8,7 +8,7 @@ const client = new MongoClient(process.env.uri);
 const profile_collection = client.db("Teams_summarizer")
     .collection("User_profiles");
 
-////////////////////////////////////////////////////  ALL PATHS //////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////  ALL PATHS ///////////////////////////////////////////////////
 app.get('/', (req, res) => {
     res.send('Hello world')
 })
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 app.post('/signup', async (req, res) => {
     let user = req.body;
 
-    profile_collection.find({ email: req.body.email }, { $exists: true }).toArray(function (err, docs) {
+    profile_collection.find({ email: req.body.email }).toArray(function (err, docs) {
         if (docs.length > 0) {
             return res.json({ result: "email_exists" })
         }
