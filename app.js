@@ -33,6 +33,7 @@ app.post('/login', async (req, res) => {
     profile_collection
         .findOne({ email: user.email, password: user.password }, function (err, result) {
             if (err) return { status: false };
+            console.log(result.length)
             return res.json({ status: true, result: result })
         });
 });
