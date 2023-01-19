@@ -18,7 +18,7 @@ app.post('/signup', async (req, res) => {
 
     profile_collection.find({ email: req.body.email }).toArray(function (err, docs) {
         if (docs.length > 0) {
-            return res.json({ result: "email_exists" })
+            return res.json({ result: "Email already exists" })
         }
         else {
             profile_collection
@@ -33,8 +33,11 @@ app.post('/login', async (req, res) => {
     profile_collection
         .findOne({ email: user.email, password: user.password }, function (err, result) {
             if (err) return { status: false };
-            console.log(result.length)
-            return res.json({ status: true, result: result })
+            if (result != null) {
+                return res.json({ result: result })
+            } else {
+                return res.json({ result: "Invalid email or password" })
+            }
         });
 });
 
