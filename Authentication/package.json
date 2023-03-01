@@ -1,0 +1,17 @@
+{
+  "name": "authentication",
+  "version": "1.0.0",
+  "description": "it contains code for login and sign up pages ",
+  "main": "auth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "server.js": "^1.0.0"
+  }
+}
