@@ -1,27 +1,20 @@
 {
-  "name": "deep-blue",
+  "name": "authentication",
   "version": "1.0.0",
-  "description": "",
-  "type": "module",
-  "main": "app.js",
+  "description": "it contains code for login and sign up pages ",
+  "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Mihir6365/Teams-meeting-summary-generating-API.git"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Mihir6365/Teams-meeting-summary-generating-API/issues"
-  },
-  "homepage": "https://github.com/Mihir6365/Teams-meeting-summary-generating-API#readme",
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "mongodb": "^4.13.0",
-    "mongoose": "^6.10.0"
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0"
   }
 }
