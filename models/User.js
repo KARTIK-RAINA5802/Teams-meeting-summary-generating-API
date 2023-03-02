@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 
-const User = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -15,8 +15,50 @@ const User = new mongoose.Schema({
         type: String,
         required: true
     },
-}, { collection: 'user-data' });
+});
 
-const model = mongoose.model('UserData', User)
+module.exports = mongoose.model('user', UserSchema);
 
-module.exports = model
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const mongoose = require('mongoose');
+// mongoose.set('strictQuery', true);
+
+// const User = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true
+//     },
+//     email: {
+//         type: String,
+//         required: true,
+//         unique: true
+//     },
+//     password: {
+//         type: String,
+//         required: true
+//     },
+// }, { collection: 'user-data' });
+
+// const model = mongoose.model('UserData', User)
+
+// module.exports = model
