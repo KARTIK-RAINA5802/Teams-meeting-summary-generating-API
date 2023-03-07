@@ -8,23 +8,23 @@ const InsightSchema = new mongoose.Schema({
         required: true,
     },
     meetings: [
-      {
-        meetingID: {
-            type: Schema.Types.ObjectId,
-        },
-        summary: {
-            type: String,
-            required: true
-        },
-        transcript: {
-            type: String,
-            required: true
-        },
-        impwords: {
-            type: [String],
-            required: true
+        {
+            meetingID: {
+                type: Schema.Types.ObjectId,
+            },
+            summary: {
+                type: String,
+                required: true
+            },
+            transcript: {
+                type: String,
+                required: true
+            },
+            impwords: {
+                type: [String],
+                required: true
+            }
         }
-      }
     ]
 });
 

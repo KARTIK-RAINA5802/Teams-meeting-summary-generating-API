@@ -1,6 +1,6 @@
 var fs = require('fs');
-const {vttToPlainText} = require("vtt-to-text");
-const { spawn, ChildProcess } = require('child_process');
+const { vttToPlainText } = require("vtt-to-text");
+const { spawn } = require('child_process');
 const express = require("express")
 const dotenv = require('dotenv')
 const app = express()
@@ -10,6 +10,8 @@ const User = require('./models/User')
 const Insight = require('./models/Insights')
 const jwt = require('jsonwebtoken')
 const connectToMongo = require("./db");
+const webvtt = require('node-webvtt');
+
 dotenv.config();
 app.use(cors())
 app.use(express.json())
@@ -63,69 +65,100 @@ app.post('/api/login', async (req, res) => {
 })
 
 
-app.get('/api/summary', async (req, res) => {
-    var srt = fs.readFileSync('sub.vtt','utf8');
-    let data = vttToPlainText(srt);
-    console.log(data);
-    // let text = "brotha";
-    let text = data;
-    
-    const childPython = spawn('python', ['summary.py', `${text}`]);
-    
+app.get('/api/meetings', async (req, res) => {
+
+})
+
+
+app.get('/api/generate', async (req, res) => {
+    var summary;
+    var transcript = [];
+    var srt = fs.readFileSync('sub.vtt', 'utf8');
+    let inputtxt = vttToPlainText(srt);
+    const childPython = spawn('python', ['summary.py', `${inputtxt}`]);
     childPython.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
+        summary = data.toString();
     });
-    
-    childPython.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
-    
-    childPython.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
-})
 
 
-app.post('/api/getInsights', async (req, res) => {
-    const user = await User.findOne({
-        email: req.body.email,
-    })
-
-    console.log(req.body.email);
-    if (user) {
-        Insight.findOne({"email": req.body.email})
-            .then(result => {
-                if(!result) {
-                    const insight = new Insight({email: req.body.email, meetings: req.body.meetings});
-                    insight.save()
-                    .then(() => console.log("Meeting details added with user email"))
-                    .catch(err => console.error(err))
-                    return res.json({ status: 'ok', user: true })
-                }else {
-                    const newNote = req.body.meetings[0];
-                    console.log(newNote.impwords);
-                    Insight.updateOne({email:req.body.email}, {$push: {meetings: {summary: newNote.summary, transcript: newNote.transcript, impwords: newNote.impwords}}})
-                      .then(user => {
-                        console.log(user);
-                        console.log("Added new meeting details to existing user")
-                      })
-                      .catch(err => {
-                        console.error(err);
-                      });
-                    return res.json({ status: 'ok', user: true })
-                }
-            })
-            .catch(err => console.error(err));
-    } else {
-        return res.json({ status: 'error', user: false })
+    var members = {};
+    var meet_end;
+    var active_mem = 0;
+    const parsed = webvtt.parse(srt, { strict: true });
+    var cues = parsed.cues;
+    for (var cue of cues) {
+        var cue_object = {};
+        cue_object["start"] = cue["start"];
+        var str = cue.text;
+        var name = str.substring(
+            3,
+            str.indexOf(">")
+        );
+        cue_object["name"] = name;
+        var sentence = str.substring(
+            str.indexOf(">") + 1,
+            str.lastIndexOf("<")
+        );
+        cue_object["sentence"] = sentence;
+        var weight = sentence.split(" ").length;
+        if (members[name] === undefined) {
+            members[name] = 0; 4
+        }
+        members[name] += weight;
+        meet_end = cue["end"];
+        transcript.push(cue_object)
     }
+
+    for (const key in members) {
+        if (members.hasOwnProperty(key)) {
+            if (members[key] > 25) {
+                active_mem++;
+            }
+        }
+    }
+
+    var insights = { duration: meet_end, speakers: members, active_members: active_mem }
+    childPython.on('close', (code) => {
+        return res.send({ transcript: transcript, insights: insights, summary: summary })
+    });
+
+    // const user = await User.findOne({
+    //     email: req.body.email,
+    // })
+
+    // console.log(req.body.email);
+    // if (user) {
+
+    //     Insight.findOne({ "email": req.body.email })
+    //         .then(result => {
+    //             if (!result) {
+    //                 const insight = new Insight({ email: req.body.email, meetings: req.body.meetings });
+    //                 insight.save()
+    //                     .then(() => console.log("Meeting details added with user email"))
+    //                     .catch(err => console.error(err))
+    //                 return res.json({ status: 'ok', user: true })
+    //             } else {
+    //                 const newNote = req.body.meetings[0];
+    //                 console.log(newNote.impwords);
+    //                 Insight.updateOne({ email: req.body.email }, { $push: { meetings: { summary: newNote.summary, transcript: newNote.transcript, impwords: newNote.impwords } } })
+    //                     .then(user => {
+    //                         console.log(user);
+    //                         console.log("Added new meeting details to existing user")
+    //                     })
+    //                     .catch(err => {
+    //                         console.error(err);
+    //                     });
+    //                 return res.json({ status: 'ok', user: true })
+    //             }
+    //         })
+    //         .catch(err => console.error(err));
+    // } else {
+    //     return res.json({ status: 'error', user: false })
+    // }
 })
 
-// var parser = require('subtitles-parser-vtt');
 
 
-// var data = parser.fromVtt(srt);
-// console.log(data);
 
 app.listen(5000, () => {
     console.log("server started")
