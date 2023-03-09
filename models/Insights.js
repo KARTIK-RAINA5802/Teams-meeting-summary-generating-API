@@ -16,13 +16,36 @@ const InsightSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
-            transcript: {
-                type: String,
-                required: true
-            },
-            impwords: {
-                type: [String],
-                required: true
+            transcript: [
+               {
+                  start: {
+                    type: Number,
+                    required: true
+                  },
+                  name: {
+                    type: String,
+                    required: true
+                  },
+                  sentence: {
+                    type: String,
+                    required: true
+                  }
+               }
+            ],
+            insights: {
+                duration: {
+                    type: String,
+                    required: true
+                },
+                speakers: {
+                    type: Map,
+                    of: Number
+                },
+                active_members: {
+                    type: Number,
+                    required: true
+                }
+
             }
         }
     ]
