@@ -70,6 +70,8 @@ app.get('/api/meetings', async (req, res) => {
 })
 
 
+
+///////...................................................In order to request on this route(/api/generate) you have to send email in the body ........................................................../////////
 app.get('/api/generate', async (req, res) => {
     var summary;
     var transcript = [];
@@ -119,42 +121,30 @@ app.get('/api/generate', async (req, res) => {
 
     var insights = { duration: meet_end, speakers: members, active_members: active_mem }
     childPython.on('close', (code) => {
-        return res.send({ transcript: transcript, insights: insights, summary: summary })
+        let meeting = [{ transcript: transcript, insights: insights, summary: summary }];
+        Insight.findOne({ "email": req.body.email })
+            .then(result => {
+                if (!result) {
+                    const insight = new Insight({ email: req.body.email, meetings: meeting });
+                    insight.save()
+                        .then(() => console.log("Meeting details added with user email"))
+                        .catch(err => console.error(err))
+                    return res.json({ status: 'ok', user: true })
+                } else {
+                    Insight.updateOne({ email: req.body.email }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
+                        .then(user => {
+                            console.log(user);
+                            console.log("Added new meeting details to existing user")
+                        })
+                        .catch(err => {
+                            console.error(err);
+                        });
+                    return res.json({ status: 'ok', user: true })
+                }
+            })
+            .catch(err => console.error(err));
     });
 
-    // const user = await User.findOne({
-    //     email: req.body.email,
-    // })
-
-    // console.log(req.body.email);
-    // if (user) {
-
-    //     Insight.findOne({ "email": req.body.email })
-    //         .then(result => {
-    //             if (!result) {
-    //                 const insight = new Insight({ email: req.body.email, meetings: req.body.meetings });
-    //                 insight.save()
-    //                     .then(() => console.log("Meeting details added with user email"))
-    //                     .catch(err => console.error(err))
-    //                 return res.json({ status: 'ok', user: true })
-    //             } else {
-    //                 const newNote = req.body.meetings[0];
-    //                 console.log(newNote.impwords);
-    //                 Insight.updateOne({ email: req.body.email }, { $push: { meetings: { summary: newNote.summary, transcript: newNote.transcript, impwords: newNote.impwords } } })
-    //                     .then(user => {
-    //                         console.log(user);
-    //                         console.log("Added new meeting details to existing user")
-    //                     })
-    //                     .catch(err => {
-    //                         console.error(err);
-    //                     });
-    //                 return res.json({ status: 'ok', user: true })
-    //             }
-    //         })
-    //         .catch(err => console.error(err));
-    // } else {
-    //     return res.json({ status: 'error', user: false })
-    // }
 })
 
 
