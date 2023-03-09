@@ -139,11 +139,12 @@ app.get('/api/generate', async (req, res) => {
                         .catch(err => {
                             console.error(err);
                         });
-                    return res.json({ status: 'ok', user: true })
+                    return res.send(meeting)
                 }
             })
-            .catch(err => console.error(err));
-    });
+        });
+        
+
 
 })
 
