@@ -11,13 +11,10 @@ const Insight = require('./models/Insights')
 const jwt = require('jsonwebtoken')
 const connectToMongo = require("./db");
 const webvtt = require('node-webvtt');
-const fileUpload = require('express-fileupload')
-
 
 dotenv.config();
 app.use(cors())
 app.use(express.json())
-app.use(fileUpload())
 
 // mongoose.connect(process.env.uri)
 connectToMongo();
@@ -75,11 +72,10 @@ app.get('/api/meetings', async (req, res) => {
 
 
 ///////...................................................In order to request on this route(/api/generate) you have to send email in the body ........................................................../////////
-app.post('/api/generate', async (req, res) => {
-    const input = req.files
-    const srt = input.file.data.toString()
+app.get('/api/generate', async (req, res) => {
     var summary;
     var transcript = [];
+    var srt = fs.readFileSync('sub.vtt', 'utf8');
     let inputtxt = vttToPlainText(srt);
     const childPython = spawn('python', ['summary.py', `${inputtxt}`]);
     childPython.stdout.on('data', (data) => {
@@ -124,11 +120,8 @@ app.post('/api/generate', async (req, res) => {
     }
 
     var insights = { duration: meet_end, speakers: members, active_members: active_mem }
-    console.log("insights are", insights)
     childPython.on('close', (code) => {
         let meeting = [{ transcript: transcript, insights: insights, summary: summary }];
-        console.log("transcript is", transcript)
-        console.log("summary is", summary)
         Insight.findOne({ "email": req.body.email })
             .then(result => {
                 if (!result) {
@@ -136,7 +129,7 @@ app.post('/api/generate', async (req, res) => {
                     insight.save()
                         .then(() => console.log("Meeting details added with user email"))
                         .catch(err => console.error(err))
-                    return res.json({ status: 'ok', user: true })
+                    return res.send(meeting)
                 } else {
                     Insight.updateOne({ email: req.body.email }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
                         .then(user => {
@@ -149,7 +142,9 @@ app.post('/api/generate', async (req, res) => {
                     return res.send(meeting)
                 }
             })
-    });
+        });
+        
+
 
 })
 
