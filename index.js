@@ -5,12 +5,12 @@ const express = require("express")
 const dotenv = require('dotenv')
 const app = express()
 const cors = require('cors')
-const mongoose = require('mongoose')
 const User = require('./models/User')
 const Insight = require('./models/Insights')
-const jwt = require('jsonwebtoken')
 const connectToMongo = require("./db");
 const webvtt = require('node-webvtt');
+const session = require('express-session');
+
 
 dotenv.config();
 app.use(cors())
@@ -19,6 +19,11 @@ app.use(express.json())
 // mongoose.connect(process.env.uri)
 connectToMongo();
 
+app.use(session({
+    secret: 'your secret key',
+    resave: false,
+    saveUninitialized: true,
+}));
 
 app.post('/api/register', async (req, res) => {
     try {
@@ -48,31 +53,27 @@ app.post('/api/login', async (req, res) => {
         email: req.body.email,
     })
 
-    console.log(req.body.email);
+    // console.log(req.body.email);
     if (user) {
-        console.log(true)
-        const token = jwt.sign(
-            {
-                name: user.name,
-                email: user.email,
-            },
-            'secret123'
-        )
-        return res.json({ status: 'ok', user: token })
+        // console.log(true)
+        userEmail = req.body.email;
+        req.session.email = userEmail;
+        console.log(req.session.email);
+        return res.send("Logged in Successfully")
     } else {
         return res.json({ status: 'error', user: false })
     }
 })
 
-
-app.get('/api/meetings', async (req, res) => {
-
+app.post('/api/logout', async (req, res) => {
+    req.session.destroy();
+    res.send('Logged out successfully');
 })
-
-
 
 ///////...................................................In order to request on this route(/api/generate) you have to send email in the body ........................................................../////////
 app.get('/api/generate', async (req, res) => {
+    const userEmail = req.session.email;
+
     var summary;
     var transcript = [];
     var srt = fs.readFileSync('sub.vtt', 'utf8');
@@ -118,32 +119,39 @@ app.get('/api/generate', async (req, res) => {
             }
         }
     }
-
     var insights = { duration: meet_end, speakers: members, active_members: active_mem }
-    childPython.on('close', (code) => {
+    childPython.on('close', async (code) => {
         let meeting = [{ transcript: transcript, insights: insights, summary: summary }];
-        Insight.findOne({ "email": req.body.email })
-            .then(result => {
-                if (!result) {
-                    const insight = new Insight({ email: req.body.email, meetings: meeting });
-                    insight.save()
-                        .then(() => console.log("Meeting details added with user email"))
-                        .catch(err => console.error(err))
-                    return res.send(meeting)
-                } else {
-                    Insight.updateOne({ email: req.body.email }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
-                        .then(user => {
-                            console.log(user);
-                            console.log("Added new meeting details to existing user")
-                        })
-                        .catch(err => {
-                            console.error(err);
-                        });
-                    return res.send(meeting)
-                }
-            })
-        });
-        
+        const user = await User.findOne({
+            email: userEmail,
+        })
+        console.log(userEmail);
+        if (user) {
+            Insight.findOne({ "email": userEmail})
+                .then(result => {
+                    if (!result) {
+                        const insight = new Insight({ email: userEmail, meetings: meeting });
+                        insight.save()
+                            .then(() => console.log("Meeting details added with user email"))
+                            .catch(err => console.error(err))
+                        return res.send(meeting)
+                    } else {
+                        Insight.updateOne({ email: userEmail }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
+                            .then(user => {
+                                console.log(user);
+                                console.log("Added new meeting details to existing user")
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            });
+                        return res.send(meeting)
+                    }
+                })
+        }else{
+            res.send("Not found User")
+        }
+    });
+
 
 
 })
