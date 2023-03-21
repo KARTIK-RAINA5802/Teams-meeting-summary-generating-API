@@ -1,4 +1,3 @@
-var fs = require('fs');
 const { vttToPlainText } = require("vtt-to-text");
 const { spawn } = require('child_process');
 const express = require("express")
@@ -10,13 +9,12 @@ const Insight = require('./models/Insights')
 const connectToMongo = require("./db");
 const webvtt = require('node-webvtt');
 const session = require('express-session');
-
+const fileUpload = require('express-fileupload')
 
 dotenv.config();
 app.use(cors())
 app.use(express.json())
-
-// mongoose.connect(process.env.uri)
+app.use(fileUpload())
 connectToMongo();
 
 app.use(session({
@@ -27,35 +25,23 @@ app.use(session({
 
 app.post('/api/register', async (req, res) => {
     try {
-        // console.log(req.body.email);
-        // const user = await User.findOne({email: req.body.email});
-        // if(user) {
-        //     return res.status(400).json({error: "Sorry a user with this email already exists."})
-        // }
-        // const salt = await bcrypt.genSalt(10);
-        // const secPass = await bcrypt.hash(req.body.password, salt);
-        // console.log(req.user);
         const user = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password,
         })
-        // res.json({ status: 'ok' })
         console.log("user generated");
     } catch (err) {
         res.json({ status: 'error' })
     }
-
 })
 
 app.post('/api/login', async (req, res) => {
     const user = await User.findOne({
         email: req.body.email,
     })
-
-    // console.log(req.body.email);
+    console.log(user)
     if (user) {
-        // console.log(true)
         userEmail = req.body.email;
         req.session.email = userEmail;
         console.log(req.session.email);
@@ -70,13 +56,13 @@ app.post('/api/logout', async (req, res) => {
     res.send('Logged out successfully');
 })
 
-///////...................................................In order to request on this route(/api/generate) you have to send email in the body ........................................................../////////
-app.get('/api/generate', async (req, res) => {
-    const userEmail = req.session.email;
-
+app.post('/api/generate', async (req, res) => {
+    // const userEmail = req.session.email;
+    const input = req.files
+    const srt = input.file.data.toString()
+    console.log(srt)
     var summary;
     var transcript = [];
-    var srt = fs.readFileSync('sub.vtt', 'utf8');
     let inputtxt = vttToPlainText(srt);
     const childPython = spawn('python', ['summary.py', `${inputtxt}`]);
     childPython.stdout.on('data', (data) => {
@@ -120,40 +106,39 @@ app.get('/api/generate', async (req, res) => {
         }
     }
     var insights = { duration: meet_end, speakers: members, active_members: active_mem }
-    childPython.on('close', async (code) => {
+    childPython.on('close', async () => {
         let meeting = [{ transcript: transcript, insights: insights, summary: summary }];
-        const user = await User.findOne({
-            email: userEmail,
-        })
-        console.log(userEmail);
-        if (user) {
-            Insight.findOne({ "email": userEmail})
-                .then(result => {
-                    if (!result) {
-                        const insight = new Insight({ email: userEmail, meetings: meeting });
-                        insight.save()
-                            .then(() => console.log("Meeting details added with user email"))
-                            .catch(err => console.error(err))
-                        return res.send(meeting)
-                    } else {
-                        Insight.updateOne({ email: userEmail }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
-                            .then(user => {
-                                console.log(user);
-                                console.log("Added new meeting details to existing user")
-                            })
-                            .catch(err => {
-                                console.error(err);
-                            });
-                        return res.send(meeting)
-                    }
-                })
-        }else{
-            res.send("Not found User")
-        }
+        // const user = await User.findOne({
+        //     email: userEmail,
+        // })
+        // console.log(userEmail);
+        // if (user) {
+        //     Insight.findOne({ "email": userEmail })
+        //         .then(result => {
+        //             if (!result) {
+        //                 const insight = new Insight({ email: userEmail, meetings: meeting });
+        //                 insight.save()
+        //                     .then(() => console.log("Meeting details added with user email"))
+        //                     .catch(err => console.error(err))
+        //                 return res.send(meeting)
+        //             } else {
+        //                 Insight.updateOne({ email: userEmail }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
+        //                     .then(user => {
+        //                         console.log(user);
+        //                         console.log("Added new meeting details to existing user")
+        //                     })
+        //                     .catch(err => {
+        //                         console.error(err);
+        //                     });
+        //                 return res.send(meeting)
+        //             }
+        //         })
+        // } else {
+        //     res.send("User Not Found")
+        // }
+        return res.send(meeting)
+
     });
-
-
-
 })
 
 

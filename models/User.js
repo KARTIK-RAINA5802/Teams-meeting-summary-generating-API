@@ -29,17 +29,6 @@ module.exports = mongoose.model('user', UserSchema);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // const mongoose = require('mongoose');
 // mongoose.set('strictQuery', true);
 
