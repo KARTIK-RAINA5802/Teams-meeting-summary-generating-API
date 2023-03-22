@@ -58,10 +58,9 @@ app.post('/api/logout', async (req, res) => {
 
 app.post('/api/generate', async (req, res) => {
     // const userEmail = req.session.email;
+    var summary
     const input = req.files
     const srt = input.file.data.toString()
-    console.log(srt)
-    var summary;
     var transcript = [];
     let inputtxt = vttToPlainText(srt);
     const childPython = spawn('python', ['summary.py', `${inputtxt}`]);

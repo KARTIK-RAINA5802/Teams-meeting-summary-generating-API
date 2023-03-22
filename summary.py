@@ -72,11 +72,6 @@ text = str(sys.argv[1])
 print("the input text is: ", text)
 
 
-
-
-
-
-
 # import nltk
 # from nltk.tokenize import sent_tokenize
 # from nltk.corpus import stopwords
@@ -91,11 +86,11 @@ print("the input text is: ", text)
 
 # Virat Kohli is the best cricketer in the world. Even greats like Sachin and Ricky admire him. He has a record of 73 centuries.
 
-# Humans have been, are, and will forever be thirsty to invent things that would make their lives easier and better by a thousandfold. The capacity of what a human mind can do has always baffled me. One such major invention would be what is called as AI- Artificial Intelligence. Wouldn’t it be great if machines could think? That’s precisely what AI is. We humans have natural intelligence. But if machines can think, it’d be artificial. So, AI is just a collective term for machines that can think. 
+# Humans have been, are, and will forever be thirsty to invent things that would make their lives easier and better by a thousandfold. The capacity of what a human mind can do has always baffled me. One such major invention would be what is called as AI- Artificial Intelligence. Wouldn’t it be great if machines could think? That’s precisely what AI is. We humans have natural intelligence. But if machines can think, it’d be artificial. So, AI is just a collective term for machines that can think.
 
 # What-is-AI-Artificial-Intelligence
 
-# Now here are some examples of AI in real life. Robots are what come to mind first. They are machine replicas of human beings. They can think for themselves, take important decisions on their own without human help. Not all artificially intelligent machines need to look like human beings though. Some of the other examples include self-driving cars or Amazon Alexa or even Siri. One other important application can be speech recognition. Remember how you ask google by speaking instead of typing what you have to search for, into the search bar? That’s one of the applications right there. There are so many more applications but let me get on to other topics. 
+# Now here are some examples of AI in real life. Robots are what come to mind first. They are machine replicas of human beings. They can think for themselves, take important decisions on their own without human help. Not all artificially intelligent machines need to look like human beings though. Some of the other examples include self-driving cars or Amazon Alexa or even Siri. One other important application can be speech recognition. Remember how you ask google by speaking instead of typing what you have to search for, into the search bar? That’s one of the applications right there. There are so many more applications but let me get on to other topics.
 
 
 # Artificial Intelligence (AI) is a branch of computer science that deals with the creation of intelligent machines that can perform tasks that typically require human intelligence. The goal of AI is to create algorithms and systems that can learn from data, reason, make predictions, and take actions.
