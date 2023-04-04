@@ -107,39 +107,19 @@ app.post('/api/generate', async (req, res) => {
     var insights = { duration: meet_end, speakers: members, active_members: active_mem }
     childPython.on('close', async () => {
         let meeting = [{ transcript: transcript, insights: insights, summary: summary }];
-        // const user = await User.findOne({
-        //     email: userEmail,
-        // })
-        // console.log(userEmail);
-        // if (user) {
-        //     Insight.findOne({ "email": userEmail })
-        //         .then(result => {
-        //             if (!result) {
-        //                 const insight = new Insight({ email: userEmail, meetings: meeting });
-        //                 insight.save()
-        //                     .then(() => console.log("Meeting details added with user email"))
-        //                     .catch(err => console.error(err))
-        //                 return res.send(meeting)
-        //             } else {
-        //                 Insight.updateOne({ email: userEmail }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights } } })
-        //                     .then(user => {
-        //                         console.log(user);
-        //                         console.log("Added new meeting details to existing user")
-        //                     })
-        //                     .catch(err => {
-        //                         console.error(err);
-        //                     });
-        //                 return res.send(meeting)
-        //             }
-        //         })
-        // } else {
-        //     res.send("User Not Found")
-        // }
         return res.send(meeting)
 
     });
 })
 
+app.post('/api/generateaudio', async (req, res) => {
+    const transcript = req.body.transcript;
+    const childPython = spawn('python', ['summary.py', `${transcript}`]);
+    childPython.stdout.on('data', (data) => {
+        summary = data.toString();
+        res.send(summary)
+    });
+})
 
 
 
