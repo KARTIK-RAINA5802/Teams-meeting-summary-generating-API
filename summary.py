@@ -26,7 +26,7 @@ text = str(sys.argv[1])
 
 text_questions_remove = re.sub(r'^.*\? ','',text)
 text = text_questions_remove
-summarizer_summary = pipeline("summarization", model="facebook/bart-large-cnn")
+summarizer_summary = pipeline("summarization", model="philschmid/bart-large-cnn-samsum")
 
 
 # Original text to summarize
