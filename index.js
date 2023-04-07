@@ -115,9 +115,9 @@ app.post('/api/generate', async (req, res) => {
             }
         }
     }
-    var insights = { duration: meet_end, speakers: members, active_members: active_mem, keyword:keywordArray}
+    var insights = { duration: meet_end, speakers: members, active_members: active_mem }
     childPython.on('close',  () => {
-        let meeting = [{ transcript: transcript, insights: insights, summary: summary}];
+        let meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword:keywordArray}];
         console.log(meeting);
         return res.send(meeting)
     });
