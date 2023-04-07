@@ -15,6 +15,6 @@ for i in keywords_final:
     i = nlp(i)
     similarity = text.similarity(i)
     if similarity >= 0.3:
-        lis.append(i)
-for i in lis:
-    print(str(i).capitalize() + ",")
+        lis.append(str(i).capitalize())
+
+print(', '.join(lis))
