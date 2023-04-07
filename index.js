@@ -6,7 +6,7 @@ const app = express()
 const cors = require('cors')
 const User = require('./models/User')
 const Insight = require('./models/Insights')
-const connectToMongo = require("./db");
+// const connectToMongo = require("./db");
 const webvtt = require('node-webvtt');
 const session = require('express-session');
 const fileUpload = require('express-fileupload')
@@ -15,7 +15,7 @@ dotenv.config();
 app.use(cors())
 app.use(express.json())
 app.use(fileUpload())
-connectToMongo();
+// connectToMongo();
 
 app.use(session({
     secret: 'your secret key',
@@ -68,6 +68,17 @@ app.post('/api/generate', async (req, res) => {
         summary = data.toString();
     });
 
+    const keywords = spawn('python', ['kw.py', `${inputtxt}`]);
+    let keywordArray = [];
+    keywords.stdout.on('data', (data) => {
+        kW = data.toString();
+        keywordArray = kW.split(",");
+    });
+    
+    const textOnModel = spawn('python', ['modelWiseText.py', `${inputtxt}`]);
+    textOnModel.stdout.on('data', (data) => {
+        modelizedText = data.toString();
+    })
 
     var members = {};
     var meet_end;
@@ -104,11 +115,11 @@ app.post('/api/generate', async (req, res) => {
             }
         }
     }
-    var insights = { duration: meet_end, speakers: members, active_members: active_mem }
-    childPython.on('close', async () => {
-        let meeting = [{ transcript: transcript, insights: insights, summary: summary }];
+    var insights = { duration: meet_end, speakers: members, active_members: active_mem, keyword:keywordArray}
+    childPython.on('close',  () => {
+        let meeting = [{ transcript: transcript, insights: insights, summary: summary}];
+        console.log(meeting);
         return res.send(meeting)
-
     });
 })
 
