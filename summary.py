@@ -18,12 +18,8 @@ text = str(sys.argv[1])
 text_questions_remove = re.sub(r'^.*\? ','',text)
 text = text_questions_remove
 summarizer_summary = pipeline("summarization", model="philschmid/bart-large-cnn-samsum")
-text_questions_remove = re.sub(r'^.*\? ','',text)
-texty_text = ''
-sentences_split = text.split('. ')
-texty_text += sentences_split[0] + '.' + '\n'
-texty_text += text[len(texty_text):]
-text = texty_text
+
+
 
 # Original text to summarize
 
