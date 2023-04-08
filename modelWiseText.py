@@ -74,7 +74,7 @@ embeddings = model.encode(topics)
 distances = np.inner(embeddings, embeddings)
 
 # Perform agglomerative clustering with 4 clusters
-n_clusters = 4
+n_clusters = 2
 clustering = AgglomerativeClustering(n_clusters=n_clusters, affinity='cosine', linkage='complete',compute_full_tree=True).fit(distances)
 
 c1 = []
