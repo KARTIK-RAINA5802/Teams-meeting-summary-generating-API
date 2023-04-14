@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 
 const UserSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
     },

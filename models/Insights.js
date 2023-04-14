@@ -46,6 +46,10 @@ const InsightSchema = new mongoose.Schema({
                     required: true
                 }
 
+            },
+            keyword: {
+                type: [String],
+                required: true
             }
         }
     ]
