@@ -54,27 +54,44 @@ app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email: email });
-        if (!user) return res.status(400).json({ msg: "User does not exist" });
+        if (!user) return res.status(400).json({ error: "User does not exist" });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: "Invalid Password" });
+        if (!isMatch) return res.status(400).json({ error: "Invalid Password" });
 
         const token = jwt.sign({ id: user._id, mail: email }, process.env.JWT_SECRET);
         const insights = await Insight.findOne({ email: req.body.email });
         delete user.password;
-        console.log(token);
         res.status(200).json({ token, user, insights });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+})
 
+app.post('/getdata', async (req, res) => {
+    let emailFromToken;
+    try {
+
+        jwt.verify(req.body.token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                res.send(err);
+            } else {
+                emailFromToken = decoded.mail;
+
+            }
+        });
+        const insights = await Insight.findOne({ email: emailFromToken });
+        res.status(200).json(insights);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 })
 
 app.post('/api/generate', async (req, res) => {
     try {
+        const token = req.body.token
         let emailFromToken;
         // Pass the token here to this function 
-        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MzgzZGQyMTNmZjFjOGYxNzY5Yjk0ZSIsIm1haWwiOiJhYmNAeHl6LmdtYWlsLmNvbSIsImlhdCI6MTY4MTQ3NTcwMH0.dssFc2A8LBr8AT4VqO5Ua6xZYex26EmMJVpKZFG7A4w';
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 // Handle invalid token
@@ -82,7 +99,6 @@ app.post('/api/generate', async (req, res) => {
             } else {
                 // Email is stored in the decoded object
                 emailFromToken = decoded.mail;
-                console.log(emailFromToken);
             }
         });
 
@@ -180,74 +196,6 @@ function getSubprocessOutput(child) {
     });
 }
 
-
-
-// app.post('/api/generate', async (req, res) => {
-//     // const userEmail = req.session.email;
-//     var summary
-//     const input = req.files
-//     const srt = input.file.data.toString()
-//     var transcript = [];
-//     let inputtxt = vttToPlainText(srt);
-//     const childPython = spawn('python', ['summary.py', `${inputtxt}`]);
-//     childPython.stdout.on('data', (data) => {
-//         summary = data.toString();
-//     });
-
-//     const keywords = spawn('python', ['kw.py', `${inputtxt}`]);
-//     let keywordArray = [];
-//     keywords.stdout.on('data', (data) => {
-//         kW = data.toString();
-//         keywordArray = kW.split(",");
-//     });
-
-//     const textOnModel = spawn('python', ['modelWiseText.py', `${inputtxt}`]);
-//     textOnModel.stdout.on('data', (data) => {
-//         modelizedText = data.toString();
-//     })
-
-//     var members = {};
-//     var meet_end;
-//     var active_mem = 0;
-//     const parsed = webvtt.parse(srt, { strict: true });
-//     var cues = parsed.cues;
-//     for (var cue of cues) {
-//         var cue_object = {};
-//         cue_object["start"] = cue["start"];
-//         var str = cue.text;
-//         var name = str.substring(
-//             3,
-//             str.indexOf(">")
-//         );
-//         cue_object["name"] = name;
-//         var sentence = str.substring(
-//             str.indexOf(">") + 1,
-//             str.lastIndexOf("<")
-//         );
-//         cue_object["sentence"] = sentence;
-//         var weight = sentence.split(" ").length;
-//         if (members[name] === undefined) {
-//             members[name] = 0; 4
-//         }
-//         members[name] += weight;
-//         meet_end = cue["end"];
-//         transcript.push(cue_object)
-//     }
-
-//     for (const key in members) {
-//         if (members.hasOwnProperty(key)) {
-//             if (members[key] > 25) {
-//                 active_mem++;
-//             }
-//         }
-//     }
-//     var insights = { duration: meet_end, speakers: members, active_members: active_mem }
-//     childPython.on('close',  () => {
-//         let meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword:keywordArray}];
-//         console.log(meeting);
-//         return res.send(meeting)
-//     });
-// })
 
 app.post('/api/generateaudio', async (req, res) => {
     const transcript = req.body.transcript;
