@@ -150,7 +150,7 @@ app.post('/api/generate', async (req, res) => {
         }
         const insights = { duration: meet_end, speakers: members, active_members: active_mem };
 
-        const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray /*modelBasedText: modelizedText*/ }];
+        const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: "Name of the Meeting", type: "vtt", actionwords: ["abc ds", "adf", "asdaf"] }];
 
         Insight.findOne({ "email": emailFromToken })
             .then(result => {
@@ -161,7 +161,7 @@ app.post('/api/generate', async (req, res) => {
                         .catch(err => console.error(err))
                     return res.send(meeting);
                 } else {
-                    Insight.updateOne({ email: emailFromToken }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights, keyword: meeting[0].keywordArray } } })
+                    Insight.updateOne({ email: emailFromToken }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights, keyword: meeting[0].keyword, name: meeting[0].name, type: meeting[0].type, actionwords: meeting[0].actionwords } } })
                         .then(user => {
                             console.log(user);
                             console.log("Added new meeting details to existing user")

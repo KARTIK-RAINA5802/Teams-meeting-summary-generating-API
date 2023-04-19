@@ -17,20 +17,20 @@ const InsightSchema = new mongoose.Schema({
                 required: true
             },
             transcript: [
-               {
-                  start: {
-                    type: Number,
-                    required: true
-                  },
-                  name: {
-                    type: String,
-                    required: true
-                  },
-                  sentence: {
-                    type: String,
-                    required: true
-                  }
-               }
+                {
+                    start: {
+                        type: Number,
+                        required: true
+                    },
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    sentence: {
+                        type: String,
+                        required: true
+                    }
+                }
             ],
             insights: {
                 duration: {
@@ -50,7 +50,18 @@ const InsightSchema = new mongoose.Schema({
             keyword: {
                 type: [String],
                 required: true
-            }
+            },
+            name: {
+                type: String,
+                require: true
+            },
+            type: {
+                type: String,
+                required: true
+            },
+            actionwords: [
+                String
+            ]
         }
     ]
 });
