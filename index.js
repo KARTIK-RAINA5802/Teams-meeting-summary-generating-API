@@ -86,6 +86,28 @@ app.post('/getdata', async (req, res) => {
     }
 })
 
+app.put('/update', async (req, res) => {
+    const meetingId = req.body.id;
+    const updatedData = req.body.updates;
+
+    try {
+        const insight = await Insight.findOneAndUpdate(
+            { 'meetings._id': meetingId },
+            { $set: { 'meetings.$': updatedData } },
+            { new: true }
+          );
+      
+          if (!insight) {
+            return res.status(404).json({ error: 'Meeting not found' });
+          }
+      
+          return res.json({ message: 'Meeting updated successfully', insight });
+    } catch (err) {
+        console.error(err);
+        res.send(error);
+    }
+})
+
 app.post('/api/generate', async (req, res) => {
     try {
         const token = req.body.token
@@ -114,9 +136,9 @@ app.post('/api/generate', async (req, res) => {
         const kW = (await getSubprocessOutput(childPython2)).toString();
         keywordArray = kW.split(',');
 
-        // let modelizedText;
-        // const childPython3 = spawn('python', ['modelWiseText.py', `${inputtxt}`]);
-        // modelizedText = (await getSubprocessOutput(childPython3)).toString();
+        let title;
+        const childPython3 = spawn('python', ['title.py', `${inputtxt}`]);
+        title = (await getSubprocessOutput(childPython3)).toString();
 
         const parsed = webvtt.parse(srt, { strict: true });
         const cues = parsed.cues;
@@ -149,7 +171,7 @@ app.post('/api/generate', async (req, res) => {
         }
         const insights = { duration: meet_end, speakers: members, active_members: active_mem };
 
-        const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: "Name of the Meeting", type: "vtt", actionwords: ["abc ds", "adf", "asdaf"] }];
+        const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: title, type: "vtt", actionwords: ["abc ds", "adf", "asdaf"] }];
 
         Insight.findOne({ "email": emailFromToken })
             .then(result => {
@@ -199,18 +221,20 @@ app.post('/api/generateaudio', async (req, res) => {
 
         const transcript = req.body.transcript;
 
-        const inputtxt = transcript;
-
         let summary;
         const childPython1 = spawn('python', ['summary.py', `${transcript}`]);
         summary = (await getSubprocessOutput(childPython1)).toString();
 
         let keywordArray;
-        const childPython2 = spawn('python', ['kw.py', `${inputtxt}`]);
+        const childPython2 = spawn('python', ['kw.py', `${transcript}`]);
         const kW = (await getSubprocessOutput(childPython2)).toString();
         keywordArray = kW.split(',');
 
-        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: "Name Video Meeting", type: "audio", actionwords: ["abc ds", "adf", "asdaf"] }];
+        let title;
+        const childPython3 = spawn('python', ['title.py', `${transcript}`]);
+        title = (await getSubprocessOutput(childPython3)).toString();
+
+        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: title, type: "audio", actionwords: ["abc ds", "adf", "asdaf"] }];
 
         Insight.findOne({ "email": emailFromToken })
             .then(result => {
