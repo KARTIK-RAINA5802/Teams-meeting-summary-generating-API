@@ -173,7 +173,13 @@ app.post('/api/generate', async (req, res) => {
         let title;
         const childPython3 = spawn('python', ['title.py', `${inputtxt}`]);
         title = (await getSubprocessOutput(childPython3)).toString();
-        const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: title, type: "vtt", actionwords: ["abc ds", "adf", "asdaf"] }];
+
+        let actionWords;
+        const childPython4 = spawn('python', ['action.py', `${inputtxt}`]);
+        const AW = (await getSubprocessOutput(childPython4)).toString();
+        actionWords = AW.split(',');
+
+        const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: title, type: "vtt", actionwords: actionWords }];
 
         Insight.findOne({ "email": emailFromToken })
             .then(result => {
@@ -236,7 +242,12 @@ app.post('/api/generateaudio', async (req, res) => {
         const childPython3 = spawn('python', ['title.py', `${transcript}`]);
         title = (await getSubprocessOutput(childPython3)).toString();
 
-        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: title, type: "audio", actionwords: ["abc ds", "adf", "asdaf"] }];
+        let actionWords;
+        const childPython4 = spawn('python', ['action.py', `${transcript}`]);
+        const AW = (await getSubprocessOutput(childPython4)).toString();
+        actionWords = AW.split(',');
+
+        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: title, type: "audio", actionwords: actionWords}];
 
         Insight.findOne({ "email": emailFromToken })
             .then(result => {

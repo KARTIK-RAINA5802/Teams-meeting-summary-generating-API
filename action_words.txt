@@ -1,0 +1,450 @@
+Must
+Have to
+Should
+Need to
+Obliged to
+Required
+Please
+Don't forget
+Reminder
+Attention
+Urgent
+Important
+Deadline
+Immediately
+Quickly
+Asap
+Without delay
+Action required
+Take note
+Let me be clear
+Proceed
+Commence
+Begin
+Start
+Cease
+Halt
+Stop
+Discontinue
+Finish
+End
+Complete
+Accomplish
+Execute
+Implement
+Follow through
+Observe
+Adhere to
+Comply with
+Meet
+Deliver
+Attend
+Participate
+Register
+Confirm
+Respond
+Act
+Do not hesitate
+Take action
+Assign
+Delegate
+Deadline
+Direct
+Instruct
+Command
+Order
+Decree
+Mandate
+Dictate
+Prescribe
+Enforce
+Demand
+Request
+Ask
+Advise
+Suggest
+Propose
+Offer
+Recommend
+Urge
+Encourage
+Persuade
+Inform
+Notify
+Announce
+Broadcast
+Declare
+Proclaim
+Publicize
+Disclose
+Reveal
+Share
+Have to do
+Tomorrow
+Today
+By today
+By tomorrow
+Take a
+Make sure
+Do it
+Make a
+Change
+Make changes
+Requirements
+Requirement
+Responsible
+Responsibility
+Important
+Notice
+I will 
+I will do
+I will make
+I will change
+Will change
+Will make
+Will do
+Will create
+I will create
+Create 
+Creation 
+We need 
+They need 
+Client requirements
+Client requires
+We will 
+Tonight
+Yesterday
+Today
+Day after
+Analyse
+Assess
+Comment on
+Compare
+Criticise
+Define
+Describe
+Discuss
+Evaluate
+Examine
+Explain
+Generate
+Hypothesise
+Illustrate
+Integrate
+Interpret
+Justify
+Outline
+Prove
+Relate
+Review
+State
+Summarise
+Kick the
+Pour
+Put that
+Put the
+Wait outside
+Wait there
+Wait till
+Wait untill
+Wait for
+Do not make me wait
+Don't make me wait
+Make me wait
+Please don't
+Remember to check 
+Drive safely
+Don't litter
+Please don't talk
+Don't cut the
+Party
+Tonight
+Clean your
+Clean the
+Clean it
+Make sure
+You have to
+Make it
+Clear your
+Cancel all
+Cancel the
+Make plan
+Design a
+Act as if 
+Design it
+Try doing
+Try making
+Try cleaning
+Try changing
+Try hard
+Work hard
+Make it look like
+As if it 
+Place it
+Place it there
+Pull it
+Push it
+Pull once 
+Pull asap
+Pull as soon
+Push asap
+Push as soon
+Create asap
+Create as soon
+Clear asap
+Clear as soon
+Hold it
+Hold on to
+For now hold
+Wait for sometime before
+Wait till
+Quote the 
+Provide an estimate
+Give an estimate
+Do the work
+Complete it by 
+Be confident
+Think like a winner
+Think like you are the king
+Throw that away
+Throw asap
+Throw as soon
+Trash it
+Trash it before
+Trash it after
+Write it asap
+Write asap 
+Write as soon
+Write it as soon
+Clear writing is 
+It is required
+Bring everything
+Bring that
+Bring it
+Proceed with
+Clean your
+must
+have to
+should
+need to
+obliged to
+required
+please
+don't forget
+reminder
+attention
+urgent
+important
+deadline
+immediately
+quickly
+asap
+without delay
+action required
+take note
+let me be clear
+proceed
+commence
+begin
+start
+cease
+halt
+stop
+discontinue
+finish
+end
+complete
+accomplish
+execute
+implement
+follow through
+observe
+adhere to
+comply with
+meet
+deliver
+attend
+participate
+register
+confirm
+respond
+act
+do not hesitate
+take action
+assign
+delegate
+deadline
+direct
+instruct
+command
+order
+decree
+mandate
+dictate
+prescribe
+enforce
+demand
+request
+ask
+advise
+suggest
+propose
+offer
+recommend
+urge
+encourage
+persuade
+inform
+notify
+announce
+broadcast
+declare
+proclaim
+publicize
+disclose
+reveal
+share
+have to do
+tomorrow
+today
+by today
+by tomorrow
+take a
+make sure
+do it
+make a
+change
+make changes
+requirements
+requirement
+responsible
+responsibility
+important
+notice
+i will 
+i will do
+i will make
+i will change
+will change
+will make
+will do
+will create
+i will create
+create 
+creation 
+we need 
+they need 
+client requirements
+client requires
+we will 
+tonight
+yesterday
+today
+day after
+analyse
+assess
+comment on
+compare
+criticise
+define
+describe
+discuss
+evaluate
+examine
+explain
+generate
+hypothesise
+illustrate
+integrate
+interpret
+justify
+outline
+prove
+relate
+review
+state
+summarise
+kick the
+pour
+put that
+put the
+wait outside
+wait there
+wait till
+wait untill
+wait for
+do not make me wait
+don't make me wait
+make me wait
+please don't
+remember to check 
+drive safely
+don't litter
+please don't talk
+don't cut the
+party
+tonight
+clean your
+clean the
+clean it
+make sure
+you have to
+make it
+clear your
+cancel all
+cancel the
+make plan
+design a
+act as if 
+design it
+try doing
+try making
+try cleaning
+try changing
+try hard
+work hard
+make it look like
+as if it 
+place it
+place it there
+pull it
+push it
+pull once 
+pull asap
+pull as soon
+push asap
+push as soon
+create asap
+create as soon
+clear asap
+clear as soon
+hold it
+hold on to
+for now hold
+wait for sometime before
+wait till
+quote the 
+provide an estimate
+give an estimate
+do the work
+complete it by 
+be confident
+think like a winner
+think like you are the king
+throw that away
+throw asap
+throw as soon
+trash it
+trash it before
+trash it after
+write it asap
+write asap 
+write as soon
+write it as soon
+clear writing is 
+it is required
+bring everything
+bring that
+bring it
+proceed with
+clean your
