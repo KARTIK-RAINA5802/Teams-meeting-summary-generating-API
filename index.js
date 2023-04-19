@@ -210,7 +210,7 @@ app.post('/api/generateaudio', async (req, res) => {
         const kW = (await getSubprocessOutput(childPython2)).toString();
         keywordArray = kW.split(',');
 
-        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: "Name of the Meeting", type: "audio", actionwords: ["abc ds", "adf", "asdaf"] }];
+        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: "Name Video Meeting", type: "audio", actionwords: ["abc ds", "adf", "asdaf"] }];
 
         Insight.findOne({ "email": emailFromToken })
             .then(result => {
