@@ -16,26 +16,39 @@ const InsightSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
-            transcript: [
-                {
-                    start: {
-                        type: Number,
-                        required: true
-                    },
-                    name: {
-                        type: String,
-                        required: true
-                    },
-                    sentence: {
-                        type: String,
-                        required: true
-                    }
-                }
-            ],
+            transcript: {
+                type: Schema.Types.Mixed,
+                validate: function () {
+                  if (this.type === 'vtt') {
+                    return {
+                      type: [
+                        {
+                          start: {
+                            type: Number,
+                            required: true,
+                          },
+                          name: {
+                            type: String,
+                            required: true,
+                          },
+                          sentence: {
+                            type: String,
+                            required: true,
+                          },
+                        },
+                      ],
+                    };
+                  } else if (this.type === 'audio') {
+                    return {
+                      type: String,
+                      required: true,
+                    };
+                  }
+                },
+            },
             insights: {
                 duration: {
                     type: String,
-                    required: true
                 },
                 speakers: {
                     type: Map,
@@ -43,7 +56,6 @@ const InsightSchema = new mongoose.Schema({
                 },
                 active_members: {
                     type: Number,
-                    required: true
                 }
 
             },

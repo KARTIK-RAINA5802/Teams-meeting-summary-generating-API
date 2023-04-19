@@ -12,7 +12,6 @@ const jwt = require("jsonwebtoken");
 const User = require('./models/User');
 const Insight = require('./models/Insights');
 
-
 dotenv.config();
 app.use(cors())
 app.use(express.json())
@@ -181,6 +180,68 @@ app.post('/api/generate', async (req, res) => {
     }
 });
 
+
+
+app.post('/api/generateaudio', async (req, res) => {
+    try {
+        const token = req.body.token
+        let emailFromToken;
+        // Pass the token here to this function 
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                // Handle invalid token
+                console.error(err);
+            } else {
+                // Email is stored in the decoded object
+                emailFromToken = decoded.mail;
+            }
+        });
+
+        const transcript = req.body.transcript;
+
+        const inputtxt = transcript;
+
+        let summary;
+        const childPython1 = spawn('python', ['summary.py', `${transcript}`]);
+        summary = (await getSubprocessOutput(childPython1)).toString();
+
+        let keywordArray;
+        const childPython2 = spawn('python', ['kw.py', `${inputtxt}`]);
+        const kW = (await getSubprocessOutput(childPython2)).toString();
+        keywordArray = kW.split(',');
+
+        const meeting = [{ transcript: transcript, summary: summary, keyword: keywordArray, name: "Name of the Meeting", type: "audio", actionwords: ["abc ds", "adf", "asdaf"] }];
+
+        Insight.findOne({ "email": emailFromToken })
+            .then(result => {
+                if (!result) {
+                    const insight = new Insight({ email: emailFromToken, meetings: meeting });
+                    insight.save()
+                        .then(() => console.log("Meeting details added with user email"))
+                        .catch(err => console.error(err))
+                    return res.send(meeting);
+                } else {
+                    Insight.updateOne({ email: emailFromToken }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, keyword: meeting[0].keyword, name: meeting[0].name, type: meeting[0].type, actionwords: meeting[0].actionwords } } })
+                        .then(user => {
+                            console.log(user);
+                            console.log("Added new meeting details to existing user")
+                        })
+                        .catch(err => {
+                            console.error(err);
+                        });
+                    return res.send(meeting);
+                }
+            })
+            .catch(err => console.error(err));
+
+        console.log(meeting);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal server error');
+    }
+})
+
 function getSubprocessOutput(child) {
     return new Promise((resolve, reject) => {
         let output = '';
@@ -195,17 +256,6 @@ function getSubprocessOutput(child) {
         });
     });
 }
-
-
-app.post('/api/generateaudio', async (req, res) => {
-    const transcript = req.body.transcript;
-    const childPython = spawn('python', ['summary.py', `${transcript}`]);
-    childPython.stdout.on('data', (data) => {
-        summary = data.toString();
-        res.send(summary)
-    });
-})
-
 
 
 app.listen(5000, () => {
