@@ -95,13 +95,13 @@ app.put('/update', async (req, res) => {
             { 'meetings._id': meetingId },
             { $set: { 'meetings.$': updatedData } },
             { new: true }
-          );
-      
-          if (!insight) {
+        );
+
+        if (!insight) {
             return res.status(404).json({ error: 'Meeting not found' });
-          }
-      
-          return res.json({ message: 'Meeting updated successfully', insight });
+        }
+
+        return res.json({ message: 'Meeting updated successfully', insight });
     } catch (err) {
         console.error(err);
         res.send(error);
@@ -122,25 +122,14 @@ app.post('/api/generate', async (req, res) => {
                 emailFromToken = decoded.mail;
             }
         });
-
         const input = req.files;
         const srt = input.file.data.toString();
         const inputtxt = vttToPlainText(srt);
 
         let summary;
-        const childPython1 = spawn('python', ['summary.py', `${inputtxt}`]);
-        summary = (await getSubprocessOutput(childPython1)).toString();
-
-        let keywordArray;
-        const childPython2 = spawn('python', ['kw.py', `${inputtxt}`]);
-        const kW = (await getSubprocessOutput(childPython2)).toString();
-        keywordArray = kW.split(',');
-
-        let title;
-        const childPython3 = spawn('python', ['title.py', `${inputtxt}`]);
-        title = (await getSubprocessOutput(childPython3)).toString();
 
         const parsed = webvtt.parse(srt, { strict: true });
+        var names = []
         const cues = parsed.cues;
         const members = {};
         let meet_end;
@@ -164,13 +153,26 @@ app.post('/api/generate', async (req, res) => {
 
         for (const key in members) {
             if (members.hasOwnProperty(key)) {
+                names.push(key)
                 if (members[key] > 25) {
                     active_mem++;
                 }
             }
         }
+        console.log(names)
         const insights = { duration: meet_end, speakers: members, active_members: active_mem };
 
+        const childPython1 = spawn('python', ['summary.py', `${inputtxt}`]);
+        summary = (await getSubprocessOutput(childPython1)).toString();
+
+        let keywordArray;
+        const childPython2 = spawn('python', ['kw.py', `${inputtxt}`]);
+        const kW = (await getSubprocessOutput(childPython2)).toString();
+        keywordArray = kW.split(',');
+
+        let title;
+        const childPython3 = spawn('python', ['title.py', `${inputtxt}`]);
+        title = (await getSubprocessOutput(childPython3)).toString();
         const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: title, type: "vtt", actionwords: ["abc ds", "adf", "asdaf"] }];
 
         Insight.findOne({ "email": emailFromToken })
@@ -178,14 +180,14 @@ app.post('/api/generate', async (req, res) => {
                 if (!result) {
                     const insight = new Insight({ email: emailFromToken, meetings: meeting });
                     insight.save()
-                        .then(() => console.log("Meeting details added with user email"))
+                        .then(() => console.log(""))
                         .catch(err => console.error(err))
                     return res.send(meeting);
                 } else {
                     Insight.updateOne({ email: emailFromToken }, { $push: { meetings: { summary: meeting[0].summary, transcript: meeting[0].transcript, insights: meeting[0].insights, keyword: meeting[0].keyword, name: meeting[0].name, type: meeting[0].type, actionwords: meeting[0].actionwords } } })
                         .then(user => {
                             console.log(user);
-                            console.log("Added new meeting details to existing user")
+                            console.log("")
                         })
                         .catch(err => {
                             console.error(err);
