@@ -1,9 +1,36 @@
-Must
+Must have
+Must do
+Must be
+Must make
+Must clear
+Must make
+must have
+must do
+must be
+must make
+must clear
+must make
 Have to
-Should
+Should be
+Should do
+Should make
+Should clear
+Should hire
+should be
+should do
+should make
+should clear
+should hire
 Need to
 Obliged to
-Required
+Required to do
+Required by today
+Required by tonight
+Required asap 
+required to do
+required by today
+required by tonight
+required asap
 Please
 Don't forget
 Reminder
@@ -232,7 +259,14 @@ required
 please
 don't forget
 reminder
-attention
+attention everyone
+Attention everyone
+Please pay by the end of the day
+please pay by the end of the day
+We will do
+We'll do
+we will do
+we'll do
 urgent
 important
 deadline
@@ -306,7 +340,6 @@ reveal
 share
 have to do
 tomorrow
-today
 by today
 by tomorrow
 take a
@@ -339,7 +372,6 @@ client requires
 we will 
 tonight
 yesterday
-today
 day after
 analyse
 assess
