@@ -176,8 +176,8 @@ app.post('/api/generate', async (req, res) => {
 
         let actionWords;
         const childPython4 = spawn('python', ['action.py', `${inputtxt}`]);
-        const AW = (await getSubprocessOutput(childPython4)).toString();
-        actionWords = AW.split(',');
+        const AW = (await getSubprocessOutput(childPython4)).toString().replace(/[]/g, '');
+        actionWords = AW.split('.').map(sentence => sentence.trim().replace(/^['",\s]+/, '')).filter(sentence => sentence !== '');
 
         const meeting = [{ transcript: transcript, insights: insights, summary: summary, keyword: keywordArray, name: title, type: "vtt", actionwords: actionWords }];
 

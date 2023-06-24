@@ -23,11 +23,15 @@ should clear
 should hire
 Need to
 Obliged to
-Required to do
+Required to do it by
+Required to do it
+It is required by
 Required by today
 Required by tonight
 Required asap 
-required to do
+required to do it by
+required to do it
+it is required by
 required by today
 required by tonight
 required asap

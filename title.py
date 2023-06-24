@@ -73,6 +73,6 @@ freq = Counter(entities)
 # Choose the named entity with the highest frequency as the title
 if freq:
     title = freq.most_common(1)[0][0]
-    print(title)
+    print(title.capitalize())
 else:
     print("No relevant entities found.")

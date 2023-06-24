@@ -50,9 +50,7 @@ for word in word_list:
                 final.append(strs)
             # print(word)
 final = set(final)
-for x in final:
-    finArr.append(str(x).capitalize())
-print(', '.join(finArr))
+print(final)
 
 # name = []
 # for ent in doc.ents:
